@@ -9,12 +9,13 @@ import multer from "multer";
 import helmet from "helmet"; // set some security
 import morgan from "morgan";
 
+import authRoutes from "./routes/auth.js";
 import { register } from "./controllers/auth.js";
 
 // configurations
 const __filename = fileURLToPath(import.meta.url); // use this in case of type as module
 const __dirname = path.dirname(__filename);
-dotenv.config();
+dotenv.config(); //.env
 const app = express();
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
@@ -36,7 +37,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // routes with files
-app.post("/auth/register", upload.single("picture"), register);
+app.post("/auth/register", upload.single("picture"), register); // adding route this way is because of upload variable
+
+// routes
+app.use("/auth", authRoutes);
 
 // setup port
 const PORT = process.env.PORT || 6001;
