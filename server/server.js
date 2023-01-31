@@ -11,7 +11,7 @@ import morgan from "morgan";
 
 import { register } from "./controllers/auth.js";
 
-// Configurations
+// configurations
 const __filename = fileURLToPath(import.meta.url); // use this in case of type as module
 const __dirname = path.dirname(__filename);
 dotenv.config();
@@ -24,7 +24,7 @@ app.use(morgan("common"));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets"))); // set static files folder
 
-// File storage
+// file storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/assets");
@@ -35,15 +35,17 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Routes with files
+// routes with files
 app.post("/auth/register", upload.single("picture"), register);
 
-// Connect db & run server
+// setup port
 const PORT = process.env.PORT || 6001;
+
+// connect db & run server
 mongoose.set("strictQuery", true);
 mongoose
   .connect(process.env.MONGO_URL, {})
   .then(() => {
     app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
   })
-  .catch((error) => console.log(`${error} - did not connect`));
+  .catch((error) => console.log(`${error} - did not connect to database`));
