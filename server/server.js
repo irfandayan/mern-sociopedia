@@ -11,6 +11,7 @@ import morgan from "morgan";
 
 import authRoutes from "./routes/auth.js";
 import { register } from "./controllers/auth.js";
+import { verifyToken } from "./middlewares/auth.js";
 
 // configurations
 const __filename = fileURLToPath(import.meta.url); // use this in case of type as module
@@ -37,7 +38,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // routes with files
-app.post("/auth/register", upload.single("picture"), register); // adding route this way is because of upload variable
+app.post("/auth/register", upload.single("picture"), verifyToken, register); // adding route this way is because of upload variable
 
 // routes
 app.use("/auth", authRoutes);
