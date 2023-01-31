@@ -9,6 +9,8 @@ import multer from "multer";
 import helmet from "helmet"; // set some security
 import morgan from "morgan";
 
+import { register } from "./controllers/auth.js";
+
 // Configurations
 const __filename = fileURLToPath(import.meta.url); // use this in case of type as module
 const __dirname = path.dirname(__filename);
@@ -32,6 +34,9 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage });
+
+// Routes with files
+app.post("/auth/register", upload.single("picture"), register);
 
 // Connect db & run server
 const PORT = process.env.PORT || 6001;
