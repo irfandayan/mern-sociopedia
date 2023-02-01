@@ -10,11 +10,17 @@ import helmet from "helmet"; // set some security
 import morgan from "morgan";
 
 import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/users.js";
+import postRoutes from "./routes/posts.js";
 import { register } from "./controllers/auth.js";
+import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middlewares/auth.js";
+import User from "./models/User.js";
+import Post from "./models/Post.js";
+import { users, posts } from "./data/index.js";
 
 // configurations
-const __filename = fileURLToPath(import.meta.url); // use this in case of type as module
+const __filename = fileURLToPath(import.meta.url); // use this in case of type set to module (ES Module)
 const __dirname = path.dirname(__filename);
 dotenv.config(); //.env
 const app = express();
@@ -38,10 +44,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // routes with files
-app.post("/auth/register", upload.single("picture"), verifyToken, register); // adding route this way is because of upload variable
+app.post("/auth/register", upload.single("picture"), register); // adding route this way is because of upload variable
+app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
 // routes
 app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
+app.use("/posts", postRoutes);
 
 // setup port
 const PORT = process.env.PORT || 6001;
@@ -52,5 +61,9 @@ mongoose
   .connect(process.env.MONGO_URL, {})
   .then(() => {
     app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
+
+    // add below data just one time
+    // User.insertMany(users);
+    // Post.insertMany(posts);
   })
   .catch((error) => console.log(`${error} - did not connect to database`));
