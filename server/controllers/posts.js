@@ -70,6 +70,7 @@ export const likePost = async (req, res) => {
   try {
     const { id: postId } = req.params;
     const { userId } = req.body;
+
     const post = await Post.findById(postId);
 
     // check if post is liked or not - if user id exist that means the post is liked by that particular user
@@ -81,10 +82,12 @@ export const likePost = async (req, res) => {
       post.likes.set(userId, true); // otherwise set to liked
     }
 
+    const isLiked2 = post.likes.get(userId); // ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get
+
     // update the post and return the updated post
     // ref: https://mongoosejs.com/docs/api.html#model_Model-findByIdAndUpdate
     const updatedPost = await Post.findByIdAndUpdate(
-      id,
+      postId,
       { likes: post.likes },
       { new: true }
     );

@@ -68,8 +68,8 @@ export const addRemoveFriend = async (req, res) => {
     const { id: userId, friendId } = req.params;
 
     // check for user and friend inside database
-    const user = User.findById(userId);
-    const friend = User.findById(friendId);
+    const user = await User.findById(userId);
+    const friend = await User.findById(friendId);
 
     // check user or friend exist
     if (!user || !friend)
@@ -100,14 +100,7 @@ export const addRemoveFriend = async (req, res) => {
     // formate frieds so it can be sent to frontend
     const formattedFriends = friends.map(
       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
-        return {
-          _id,
-          firstName,
-          lastName,
-          occupation,
-          location,
-          picturePath,
-        };
+        return { _id, firstName, lastName, occupation, location, picturePath };
       }
     );
 
