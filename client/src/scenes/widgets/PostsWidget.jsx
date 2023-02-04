@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state";
+import { setPosts, removePosts } from "state";
 import PostWidget from "./PostWidget";
 
 const PostsWidget = ({ userId, isProfile = false }) => {
@@ -36,6 +36,10 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     } else {
       getPosts();
     }
+    // cleanup function for posts
+    return () => {
+      dispatch(removePosts());
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
