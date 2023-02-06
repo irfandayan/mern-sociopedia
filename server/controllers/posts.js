@@ -19,9 +19,10 @@ export const createPost = async (req, res) => {
       description,
       picturePath,
       userPicturePath: user.picturePath,
-      like: {},
+      likes: {},
       comments: [],
     });
+    console.log("🚀 ~ file: posts.js:25 ~ createPost ~ newPost", newPost);
 
     // save new post to database
     await newPost.save();
