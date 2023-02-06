@@ -29,5 +29,5 @@
 </ul>
 <h4>Deployment</h4>
 <ul>
-<li>Heroku</li>
+<li>Railway</li>
 </ul>
